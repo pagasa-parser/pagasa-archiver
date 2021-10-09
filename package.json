@@ -1,6 +1,6 @@
 {
     "name": "pagasa-archiver",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "CLI tool for archiving PAGASA bulletins",
     "main": "build/PagasaArchiver.js",
     "bin": "bin/pagasa-archiver",
