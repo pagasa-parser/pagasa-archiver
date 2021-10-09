@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as Stream from "stream";
 
-interface PAGASADocument {
+export interface PAGASADocument {
     file: string,
     count: number,
     name: string,
