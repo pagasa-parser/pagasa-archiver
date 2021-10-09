@@ -1,5 +1,4 @@
-import axios from "axios";
-import * as Stream from "stream";
+import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 
 export interface PAGASADocument {
     file: string,
@@ -57,20 +56,18 @@ export default class PagasaScraper {
             });
     }
 
-    static async downloadTCA(tca: string) : Promise<Stream> {
+    static async downloadTCA(tca: string, config: AxiosRequestConfig) : Promise<AxiosResponse> {
         return axios(
             new URL(encodeURIComponent(tca), this.INDEX_URL_TCA).toString(),
-            { responseType: "stream" }
-        )
-            .then(r => r.data);
+            config
+        );
     }
 
-    static async downloadTCB(tcb: string) : Promise<Stream> {
+    static async downloadTCB(tcb: string, config: AxiosRequestConfig) : Promise<AxiosResponse> {
         return axios(
             new URL(encodeURIComponent(tcb), this.INDEX_URL_TCB).toString(),
-            { responseType: "stream" }
-        )
-            .then(r => r.data);
+            config
+        );
     }
 
 }
