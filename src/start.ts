@@ -3,7 +3,7 @@ import { hideBin } from "yargs/helpers";
 import PagasaScraper from "./scraper/PagasaScraper";
 import Logger from "bunyan";
 import bunyanFormat from "bunyan-format";
-import {buildCode, CycloneNames} from "./data/CycloneNames";
+import {buildCode} from "./data/CycloneNames";
 import * as fs from "fs";
 import path from "path";
 
@@ -30,7 +30,7 @@ import path from "path";
     const TCBs = await PagasaScraper.listTCBs();
     for (const tcb of TCBs) {
         log.debug(`Found TCB: ${tcb.file}`);
-        const advisoryCode = buildCode(tcb.name, tcb.count);
+        const advisoryCode = buildCode(tcb);
 
         if (fs.existsSync(path.join(process.cwd(), `${advisoryCode}.pdf`))) {
             log.debug(`File exists: ${advisoryCode}, skipping...`);
@@ -47,7 +47,7 @@ import path from "path";
     const TCAs = await PagasaScraper.listTCAs();
     for (const tca of TCAs) {
         log.debug(`Found TCA: ${tca.file}`);
-        const advisoryCode = buildCode(tca.name, tca.count, true);
+        const advisoryCode = buildCode(tca, true);
 
         if (fs.existsSync(path.join(process.cwd(), `${advisoryCode}.pdf`))) {
             log.debug(`File exists: ${advisoryCode}, skipping...`);

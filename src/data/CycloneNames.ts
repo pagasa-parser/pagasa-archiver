@@ -1,3 +1,5 @@
+import {PAGASADocument} from "../scraper/PagasaScraper";
+
 export function findCycloneNumber(name: string) : [number, number] {
     const toFind = name.toLowerCase();
 
@@ -13,18 +15,20 @@ export function findCycloneNumber(name: string) : [number, number] {
     return [+(new Date().getFullYear()), 0];
 }
 
-export function buildCode(name: string, bulletinNo: number, advisory = false) {
-    const [year, cycloneNumber] = findCycloneNumber(name);
+export function buildCode(document: PAGASADocument, advisory = false) {
+    const [year, cycloneNumber] = findCycloneNumber(document.name);
     return `PAGASA_${
         year.toString().substr(2)
     }-TC${
         cycloneNumber < 10 ? `0${cycloneNumber}` : cycloneNumber
     }_${
-        name[0].toUpperCase() + name.substr(1).toLowerCase()
+        document.name[0].toUpperCase() + document.name.substr(1).toLowerCase()
     }_TC${
         advisory ? "A" : "B"
     }#${
-        bulletinNo < 10 ? `0${bulletinNo}` : bulletinNo
+        document.count < 10 ? `0${document.count}` : document.count
+    }${
+        document.final ? "-FINAL" : ""
     }`
 }
 
