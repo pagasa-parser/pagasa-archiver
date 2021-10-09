@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-import "../build/start.js";
+require("../build/start.js");
