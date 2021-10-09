@@ -37,8 +37,8 @@ import path from "path";
         } else {
             log.debug(`Downloading to ${advisoryCode}...`);
             const fileStream = fs.createWriteStream(`${advisoryCode}.pdf`);
-            const downloadStream = await PagasaScraper.downloadTCB(tcb.file);
-            downloadStream.pipe(fileStream);
+            const downloadStream = await PagasaScraper.downloadTCB(tcb.file, {responseType: "stream"});
+            downloadStream.data.pipe(fileStream);
             log.trace(`Finished downloading to ${advisoryCode}.`);
         }
     }
@@ -54,8 +54,8 @@ import path from "path";
         } else {
             log.debug(`Downloading to ${advisoryCode}...`);
             const fileStream = fs.createWriteStream(`${advisoryCode}.pdf`);
-            const downloadStream = await PagasaScraper.downloadTCA(tca.file);
-            downloadStream.pipe(fileStream);
+            const downloadStream = await PagasaScraper.downloadTCA(tca.file, {responseType: "stream"});
+            downloadStream.data.pipe(fileStream);
             log.trace(`Finished downloading to ${advisoryCode}.`);
         }
     }
