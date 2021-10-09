@@ -1,26 +1,26 @@
-export function findCycloneNumber(name: string) : number {
+export function findCycloneNumber(name: string) : [number, number] {
     const toFind = name.toLowerCase();
 
-    for (const set of CycloneNames) {
+    for (const [year, set] of Object.entries(CycloneNames)) {
         for (let id = 0; id < set.length; id++) {
             const name = set[id];
             if (name.toLowerCase() === toFind)  {
-                return id + 1;
+                return [+year, id + 1];
             }
         }
     }
 
-    return 0;
+    return [+(new Date().getFullYear()), 0];
 }
 
 export function buildCode(name: string, bulletinNo: number, advisory = false) {
-    const cycloneNumber = findCycloneNumber(name);
+    const [year, cycloneNumber] = findCycloneNumber(name);
     return `PAGASA_${
-        new Date().getFullYear().toString().substr(2)
+        year.toString().substr(2)
     }-TC${
         cycloneNumber < 10 ? `0${cycloneNumber}` : cycloneNumber
     }_${
-        name[0].toUpperCase() + name.slice(1).toLowerCase()
+        name[0].toUpperCase() + name.substr(1).toLowerCase()
     }_TC${
         advisory ? "A" : "B"
     }#${
@@ -29,8 +29,8 @@ export function buildCode(name: string, bulletinNo: number, advisory = false) {
 }
 
 // noinspection SpellCheckingInspection
-export const CycloneNames = [
-    [
+export const CycloneNames = {
+    2021: [
         "Auring",
         "Bising",
         "Crising",
@@ -67,7 +67,7 @@ export const CycloneNames = [
         "Isko",
         "Jerome"
     ],
-    [
+    2022: [
         "Agaton",
         "Basyang",
         "Caloy",
@@ -104,7 +104,7 @@ export const CycloneNames = [
         "Indang",
         "Jessa"
     ],
-    [
+    2023: [
         "Amang",
         "Betty",
         "Chedeng",
@@ -141,7 +141,7 @@ export const CycloneNames = [
         "Irma",
         "Jaime"
     ],
-    [
+    2024: [
         "Aghon",
         "Butchoy",
         "Carina",
@@ -178,4 +178,4 @@ export const CycloneNames = [
         "Ismael",
         "Julio"
     ]
-];
+};
