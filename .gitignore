@@ -1,0 +1,13 @@
+# Don't include dependencies
+node_modules
+
+# Development
+.vscode
+.idea
+
+# Build artifacts
+build
+*.tgz
+
+# Automatically-built files
+.npmignore
