@@ -15,7 +15,7 @@ export function findCycloneNumber(name: string) : [number, number] {
     return [+(new Date().getFullYear()), 0];
 }
 
-export function buildCode(document: PAGASADocument, advisory = false) {
+export function buildCode(document: PAGASADocument, advisory = false): string {
     const [year, cycloneNumber] = findCycloneNumber(document.name);
     return `PAGASA_${
         year.toString().substr(2)
@@ -29,7 +29,7 @@ export function buildCode(document: PAGASADocument, advisory = false) {
         document.count < 10 ? `0${document.count}` : document.count
     }${
         document.final ? "-FINAL" : ""
-    }`
+    }`;
 }
 
 // noinspection SpellCheckingInspection

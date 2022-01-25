@@ -26,7 +26,7 @@ import path from "path";
 
     log.info(`Starting PAGASA Archiver at ${ new Date().toUTCString() }...`);
 
-    log.info(`Downloading Tropical Cyclone Bulletins...`);
+    log.info("Downloading Tropical Cyclone Bulletins...");
     const TCBs = await PagasaScraper.listTCBs();
     for (const tcb of TCBs) {
         log.debug(`Found TCB: ${tcb.file}`);
@@ -43,7 +43,7 @@ import path from "path";
         }
     }
 
-    log.info(`Downloading Tropical Cyclone Advisories...`);
+    log.info("Downloading Tropical Cyclone Advisories...");
     const TCAs = await PagasaScraper.listTCAs();
     for (const tca of TCAs) {
         log.debug(`Found TCA: ${tca.file}`);

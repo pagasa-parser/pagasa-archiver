@@ -37,7 +37,7 @@ export default class PagasaScraper {
                     count: +tcaParts[1],
                     name: tcaParts[3],
                     final: tcaParts[2] != null && tcaParts[2].startsWith("F")
-                }
+                };
             });
     }
 
@@ -52,7 +52,7 @@ export default class PagasaScraper {
                     count: +tcbParts[1],
                     name: tcbParts[3],
                     final: tcbParts[2] != null && tcbParts[2].startsWith("F")
-                }
+                };
             });
     }
 
