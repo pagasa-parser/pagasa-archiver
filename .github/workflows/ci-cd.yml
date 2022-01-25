@@ -25,6 +25,7 @@ jobs:
                     github_token: ${{ secrets.GITHUB_TOKEN }}
 
             -   name: Perform tests
+                if: false # No tests made yet.
                 run: npm test
 
             -   name: Publish
