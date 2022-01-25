@@ -6,7 +6,9 @@
     "bin": "bin/pagasa-archiver",
     "scripts": {
         "build": "tsc",
-        "prepack": "npm run build"
+        "prepack": "npm run clean && npm run build",
+        "clean": "rimraf build",
+        "prepare": "husky install"
     },
     "repository": {
         "type": "git",
@@ -26,13 +28,15 @@
     },
     "homepage": "https://github.com/pagasa-parser/pagasa-archiver#readme",
     "devDependencies": {
+        "@types/bunyan": "^1.8.7",
         "@types/bunyan-format": "^0.2.4",
         "@types/node": "^16.9.1",
         "@types/yargs": "^17.0.2",
         "@typescript-eslint/eslint-plugin": "^4.31.0",
-        "@types/bunyan": "^1.8.7",
         "cat": "^0.2.0",
         "eslint": "^7.32.0",
+        "husky": "^7.0.4",
+        "rimraf": "^3.0.2",
         "ts-node": "^10.2.1",
         "typescript": "^4.4.3"
     },
