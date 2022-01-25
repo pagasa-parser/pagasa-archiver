@@ -42,7 +42,9 @@
     },
     "files": [
         "bin",
-        "build"
+        "build",
+        "LICENSE",
+        "README.md"
     ],
     "dependencies": {
         "axios": "^0.21.4",

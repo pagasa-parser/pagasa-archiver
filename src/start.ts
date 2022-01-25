@@ -17,7 +17,7 @@ import path from "path";
 
     const log = Logger.createLogger({
         name: "PAGASA Archiver",
-        level: 50 - (argv.v * 10),
+        level: 30 - (argv.v * 10),
         stream: bunyanFormat({
             outputMode: "short",
             levelInString: true

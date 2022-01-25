@@ -12,7 +12,7 @@ export default class PagasaScraper {
     static readonly INDEX_URL_TCA = "https://pubfiles.pagasa.dost.gov.ph/tamss/weather/tca/";
     static readonly INDEX_URL_TCB = "https://pubfiles.pagasa.dost.gov.ph/tamss/weather/bulletin/";
 
-    static async findLinks(url: string, config?: AxiosRequestConfig) : Promise<string[]> {
+    static async findLinks(url: string, config: AxiosRequestConfig = {}) : Promise<string[]> {
         const { data } = (await axios(Object.assign(config, { responseType: "text", url: url })));
 
         const links : string[] = [];
@@ -26,7 +26,7 @@ export default class PagasaScraper {
         return links;
     }
 
-    static async listTCAs(config?: AxiosRequestConfig) : Promise<PAGASADocument[]> {
+    static async listTCAs(config: AxiosRequestConfig = {}) : Promise<PAGASADocument[]> {
         return (await this.findLinks(this.INDEX_URL_TCA, config))
             .filter(v => /TCA%23(\d+)-?(F(?:INAL)?)?_(.+?)\.pdf/gi.test(v))
             .map(v => {
@@ -41,7 +41,7 @@ export default class PagasaScraper {
             });
     }
 
-    static async listTCBs(config?: AxiosRequestConfig) : Promise<PAGASADocument[]> {
+    static async listTCBs(config: AxiosRequestConfig = {}) : Promise<PAGASADocument[]> {
         return (await this.findLinks(this.INDEX_URL_TCB, config))
             .filter(v => /TCB%23(\d+)-?(F(?:INAL)?)?_(.+?)\.pdf/gi.test(v))
             .map(v => {
