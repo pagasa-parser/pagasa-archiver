@@ -32,10 +32,10 @@ export default class PagasaScraper {
         config: AxiosRequestConfig & { indexURL?: string } = {}
     ) : Promise<PAGASADocument[]> {
         return (await this.findLinks(config.indexURL ?? this.INDEX_URL_TCA, config))
-            .filter(v => /TCA%23(\d+)-?(F(?:INAL)?)?_(.+?)\.pdf/gi.test(v))
+            .filter(v => /TCA%23(\d+)-?(F(?:INAL)?)?(?:%20| |_)+(.+?)\.pdf/gi.test(v))
             .map(v => {
                 const file = decodeURIComponent(v);
-                const tcaParts = /TCA#(\d+)-?(F(?:INAL)?)?_(.+?)\.pdf/gi.exec(file);
+                const tcaParts = /TCA#(\d+)-?(F(?:INAL)?)?[ _]+(.+?)\.pdf/gi.exec(file);
                 return {
                     file,
                     count: +tcaParts[1],
@@ -49,10 +49,10 @@ export default class PagasaScraper {
         config: AxiosRequestConfig & { indexURL?: string } = {}
     ) : Promise<PAGASADocument[]> {
         return (await this.findLinks(config.indexURL ?? this.INDEX_URL_TCB, config))
-            .filter(v => /TCB%23(\d+)-?(F(?:INAL)?)?_(.+?)\.pdf/gi.test(v))
+            .filter(v => /TCB%23(\d+)-?(F(?:INAL)?)?(?:%20| |_)+(.+?)\.pdf/gi.test(v))
             .map(v => {
                 const file = decodeURIComponent(v);
-                const tcbParts = /TCB#(\d+)-?(F(?:INAL)?)?_(.+?)\.pdf/gi.exec(file);
+                const tcbParts = /TCB#(\d+)-?(F(?:INAL)?)?[ _]+(.+?)\.pdf/gi.exec(file);
                 return {
                     file,
                     count: +tcbParts[1],

@@ -12,6 +12,9 @@ import path from "path";
         v: {
             type: "count",
             alias: "verbose"
+        },
+        download: {
+            type: "boolean"
         }
     }).argv;
 
@@ -32,7 +35,9 @@ import path from "path";
         log.debug(`Found TCB: ${tcb.file}`);
         const advisoryCode = buildCode(tcb);
 
-        if (fs.existsSync(path.join(process.cwd(), `${advisoryCode}.pdf`))) {
+        if (!argv.download) {
+            // Downloading disabled. Skip.
+        } else if (fs.existsSync(path.join(process.cwd(), `${advisoryCode}.pdf`))) {
             log.debug(`File exists: ${advisoryCode}, skipping...`);
         } else {
             log.debug(`Downloading to ${advisoryCode}...`);
@@ -49,7 +54,9 @@ import path from "path";
         log.debug(`Found TCA: ${tca.file}`);
         const advisoryCode = buildCode(tca, true);
 
-        if (fs.existsSync(path.join(process.cwd(), `${advisoryCode}.pdf`))) {
+        if (!argv.download) {
+            // Downloading disabled. Skip.
+        } else if (fs.existsSync(path.join(process.cwd(), `${advisoryCode}.pdf`))) {
             log.debug(`File exists: ${advisoryCode}, skipping...`);
         } else {
             log.debug(`Downloading to ${advisoryCode}...`);
