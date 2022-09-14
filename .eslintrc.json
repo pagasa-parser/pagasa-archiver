@@ -38,7 +38,7 @@
             "error",
             "always"
         ],
-        "no-unused-vars": [
+        "@typescript-eslint/no-unused-vars": [
             "warn"
         ],
         "camelcase": [

@@ -1,10 +1,31 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
+import {FileMismatchError} from "../error/FileMismatchError";
 
 export interface PAGASADocument {
     file: string,
     count: number,
     name: string,
     final?: boolean
+}
+
+interface ListOptions {
+    /**
+     * The index URL to use. Pass this parameter in cases where a proper index could not be
+     * read or used, or if you wish to download from another site that mirrors the DOST-PAGASA's
+     * pubfiles website.
+     *
+     * @example "https://pubfiles.pagasa.dost.gov.ph/tamss/weather/tca/"
+     */
+    indexURL?: string;
+    /**
+     * Whether to include unnamed storms. Unnamed storms will have names of "UNNAMED", and will
+     * respectively be denoted in {@link CycloneNames} as cyclone 00 of the current year.
+     */
+    includeUnnamed?: boolean;
+}
+
+function cloneRegex(original: RegExp): RegExp {
+    return new RegExp(original.source, original.flags);
 }
 
 export default class PagasaScraper {
@@ -29,34 +50,59 @@ export default class PagasaScraper {
     }
 
     static async listTCAs(
-        config: AxiosRequestConfig & { indexURL?: string } = {}
+        config: AxiosRequestConfig & ListOptions = {}
     ) : Promise<PAGASADocument[]> {
-        return (await this.findLinks(config.indexURL ?? this.INDEX_URL_TCA, config))
-            .filter(v => /TCA%23(\d+)-?(F(?:INAL)?)?(?:%20| |_)+(.+?)\.pdf/gi.test(v))
+        const urlRegex = config.includeUnnamed ?
+            /TCA%23(\d+)A?-?(F(?:INAL)?)?(?:(?:%20| |_)+(.+?))?\.pdf/gi :
+            /TCA%23(\d+)A?-?(F(?:INAL)?)?(?:%20| |_)+(.+?)\.pdf/gi;
+        const nameRegex = config.includeUnnamed ?
+            /TCA#(\d+)A?-?(F(?:INAL)?)?(?:[ _]+(.+?))?\.pdf/gi :
+            /TCA#(\d+)A?-?(F(?:INAL)?)?[ _]+(.+?)\.pdf/gi;
+
+        return (await this.findLinks(config.indexURL || this.INDEX_URL_TCA, config))
+            .filter(v => cloneRegex(urlRegex).test(v))
             .map(v => {
                 const file = decodeURIComponent(v);
-                const tcaParts = /TCA#(\d+)-?(F(?:INAL)?)?[ _]+(.+?)\.pdf/gi.exec(file);
+                const tcaParts = cloneRegex(nameRegex).exec(file);
+
+                if (tcaParts == null) {
+                    throw new FileMismatchError( v, file, tcaParts );
+                }
+
                 return {
                     file,
                     count: +tcaParts[1],
-                    name: tcaParts[3],
+                    name: tcaParts[3] || (config.includeUnnamed ? "Unnamed" : undefined),
                     final: tcaParts[2] != null && tcaParts[2].startsWith("F")
                 };
             });
     }
 
     static async listTCBs(
-        config: AxiosRequestConfig & { indexURL?: string } = {}
+        config: AxiosRequestConfig & ListOptions = {}
     ) : Promise<PAGASADocument[]> {
-        return (await this.findLinks(config.indexURL ?? this.INDEX_URL_TCB, config))
-            .filter(v => /TCB%23(\d+)-?(F(?:INAL)?)?(?:%20| |_)+(.+?)\.pdf/gi.test(v))
+        const urlRegex = config.includeUnnamed ?
+            /TCB%23(\d+)A?-?(F(?:INAL)?)?(?:(?:%20| |_)+(.+?))?\.pdf/gi :
+            /TCB%23(\d+)A?-?(F(?:INAL)?)?(?:%20| |_)+(.+?)\.pdf/gi;
+        const nameRegex = config.includeUnnamed ?
+            /TCB#(\d+)A?-?(F(?:INAL)?)?(?:[ _]+(.+?))?\.pdf/gi :
+            /TCB#(\d+)A?-?(F(?:INAL)?)?[ _]+(.+?)\.pdf/gi;
+
+
+        return (await this.findLinks(config.indexURL || this.INDEX_URL_TCB, config))
+            .filter(v => cloneRegex(urlRegex).test(v))
             .map(v => {
                 const file = decodeURIComponent(v);
-                const tcbParts = /TCB#(\d+)-?(F(?:INAL)?)?[ _]+(.+?)\.pdf/gi.exec(file);
+                const tcbParts = cloneRegex(nameRegex).exec(file);
+
+                if (tcbParts == null) {
+                    throw new FileMismatchError( v, file, tcbParts );
+                }
+
                 return {
                     file,
                     count: +tcbParts[1],
-                    name: tcbParts[3],
+                    name: tcbParts[3] || (config.includeUnnamed ? "Unnamed" : undefined),
                     final: tcbParts[2] != null && tcbParts[2].startsWith("F")
                 };
             });
